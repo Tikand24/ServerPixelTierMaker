@@ -6,7 +6,7 @@ const {
   createItem,
   updateItem,
   deleteItem,
-} = require('../controllers/tier');
+} = require('../controllers/category');
 const checkRol = require('../middleware/rol');
 const authMiddleware = require('../middleware/session');
 const {

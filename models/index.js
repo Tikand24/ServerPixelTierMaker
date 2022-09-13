@@ -2,7 +2,7 @@ const models = {
     usersModel: require('./nosql/users'),
     tracksModel: require('./nosql/tracks'),
     storageModel: require('./nosql/storage'),
-    tierModel: require('./nosql/tier'),
+    categoryModel: require('./nosql/category'),
     tierItemModel: require('./nosql/tieritem'),
     itemModel: require('./nosql/items'),
 }

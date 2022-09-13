@@ -11,12 +11,9 @@ const TierItemSchema = mongoose.Schema(
           type:String
       },
     }],
-    tierId: {
+    categoryId: {
       type: mongoose.Types.ObjectId,
-    },
-    mediaId: {
-      type: mongoose.Types.ObjectId,
-    },
+    }
   },
   {
     timestamps: true,
