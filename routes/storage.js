@@ -25,7 +25,7 @@ router.get('/:id',authMiddleware, validatorGetItem, getItem);
 /**
  * create storage
  */
-router.post('/',authMiddleware, uploadMiddleware.single('myfile'), createItem);
+router.post('/',authMiddleware, uploadMiddleware.array('myfile'), createItem);
 /**
  * delete storage
  */

@@ -11,7 +11,7 @@ const ItemSchema = mongoose.Schema(
           type:String
       },
     }],
-    iterItemId: {
+    templateId: {
       type: mongoose.Types.ObjectId,
     },
     mediaId: {

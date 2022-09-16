@@ -1,7 +1,7 @@
 const { storageModel } = require('../models');
 const { handleHttpError } = require('../utils/handleError');
 const { matchedData } = require('express-validator');
-const fs = require("fs");
+const fs = require('fs');
 
 const PUBLIC_URL = process.env.PUBLIC_URL;
 const MEDIA_PATH = `${__dirname}/../storage`;
@@ -17,7 +17,6 @@ const getItems = async (req, res) => {
     res.send({ data });
   } catch (error) {
     handleHttpError(res, 'ERROR_GET_STORAGE');
-    
   }
 };
 
@@ -26,7 +25,7 @@ const getItems = async (req, res) => {
  * @param {*} req
  * @param {*} res
  */
-const getItem = async(req, res) => {
+const getItem = async (req, res) => {
   try {
     req = matchedData(req);
     const { id } = req;
@@ -44,16 +43,21 @@ const getItem = async(req, res) => {
  */
 const createItem = async (req, res) => {
   try {
-    const { body, file } = req;
-    const fileDaa = {
-      filename: file.filename,
-      url: `${PUBLIC_URL}/${file.filename}`
-  
+    const { body, filePaths } = req;
+    const fileData = [];
+    if (filePaths) {
+      
+      filePaths.map((file) => {
+        fileData.push({
+          filename: file,
+          url: `${PUBLIC_URL}/${file}`,
+        });
+      });
     }
-    const data = await storageModel.create(fileDaa);
+    const data = await storageModel.insertMany(fileData);
     res.send({ data });
   } catch (error) {
-    console.log('error',error);
+    console.log('error', error);
     handleHttpError(res, 'ERROR_CREATE_STORAGE');
   }
 };
@@ -68,13 +72,13 @@ const deleteItem = async (req, res) => {
     req = matchedData(req);
     const { id } = req;
     const dataFile = await storageModel.findById(id);
-    const {filename} = dataFile;
+    const { filename } = dataFile;
     const filePath = `${MEDIA_PATH}/${filename}`;
-    fs.unlinkSync(filePath)
-    const data ={
+    fs.unlinkSync(filePath);
+    const data = {
       filePath,
-      deleted:1
-    }
+      deleted: 1,
+    };
     res.send({ data });
   } catch (error) {
     handleHttpError(res, 'ERROR_DELETE_STORAGE');

@@ -1,5 +1,5 @@
 const { matchedData } = require('express-validator');
-const { tierItemModel } = require('../models');
+const { tierModel } = require('../models');
 const { handleHttpError } = require('../utils/handleError');
 
 /**
@@ -9,10 +9,10 @@ const { handleHttpError } = require('../utils/handleError');
  */
 const getItems = async (req, res) => {
   try {
-    const data = await tierItemModel.find({});
+    const data = await tierModel.find({});
     res.send({ data });
   } catch (error) {
-    handleHttpError(res, 'ERROR_GET_ITEM_TIER');
+    handleHttpError(res, 'ERROR_GET_TIER');
   }
 };
 
@@ -25,7 +25,7 @@ const getItem = async (req, res) => {
   try {
     req = matchedData(req);
     const { id } = req;
-    const data = await tierItemModel.findById(id);
+    const data = await tierModel.findById(id);
     res.send({ data });
   } catch (error) {
     handleHttpError(res, 'ERROR_GET_ITEM_TIER');
@@ -39,11 +39,12 @@ const getItem = async (req, res) => {
  */
 const createItem = async (req, res) => {
   try {
-    body = matchedData(req);
-    const data = await tierItemModel.create(body);
+    req = matchedData(req);
+    const { tiers } = req;
+    const data = await tierModel.insertMany(tiers);
     res.send({ data });
   } catch (error) {
-    handleHttpError(res, 'ERROR_CREATE_ITEM_TIER');
+    handleHttpError(res, 'ERROR_CREATE_TIER');
   }
 };
 
@@ -55,10 +56,10 @@ const createItem = async (req, res) => {
 const updateItem = async (req, res) => {
   try {
     const { id, ...body } = matchedData(req);
-    const data = await tierItemModel.findOneAndUpdate(id, body);
+    const data = await tierModel.findOneAndUpdate(id, body);
     res.send({ data });
   } catch (error) {
-    handleHttpError(res, 'ERROR_UPDATE_ITEM_TIER');
+    handleHttpError(res, 'ERROR_UPDATE_TIER');
   }
 };
 
@@ -68,14 +69,13 @@ const updateItem = async (req, res) => {
  * @param {*} res
  */
 const deleteItem = async (req, res) => {
-    
   try {
     req = matchedData(req);
     const { id } = req;
-    const data = await tierItemModel.delete({_id:id});
+    const data = await tierModel.delete({ _id: id });
     res.send({ data });
   } catch (error) {
-    handleHttpError(res, 'ERROR_DELETE_ITEM_TIER');
+    handleHttpError(res, 'ERROR_DELETE_TIER');
   }
 };
 

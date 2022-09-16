@@ -1,5 +1,5 @@
 const { matchedData } = require('express-validator');
-const { categoryModel,tierItemModel,storageModel } = require('../models');
+const { categoryModel,templateModel,storageModel } = require('../models');
 const { handleHttpError } = require('../utils/handleError');
 
 /**
@@ -10,7 +10,7 @@ const { handleHttpError } = require('../utils/handleError');
 const getItems = async (req, res) => {
   try {
     const tiers = await categoryModel.find({}).lean();
-    const tiersItems = await tierItemModel.find({tierId:tiers.map(d=>d._id)}).lean();
+    const tiersItems = await templateModel.find({tierId:tiers.map(d=>d._id)}).lean();
     const storageMedia = await storageModel.find({_id:tiersItems.map(d=>d.mediaId)}).lean();
     tiers.forEach(tier => {
       const items = tiersItems.filter(tierItem=>tierItem.tierId.toString() == tier._id.toString());

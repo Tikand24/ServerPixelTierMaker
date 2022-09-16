@@ -6,9 +6,12 @@ const storage = multer.diskStorage({
         cb(null,pathStorage);
     },
     filename: function(req,file,cb){
-        console.log('reqFileName',file);
         const ext = file.originalname.split('.').pop();
         const filenamePath = `file-${Date.now()}.${ext}`;
+        if(!req.filePaths){
+            req.filePaths=[];
+        }
+        req.filePaths = [...req.filePaths,filenamePath]
         cb(null,filenamePath);
     }
 });

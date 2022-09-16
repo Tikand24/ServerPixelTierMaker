@@ -3,7 +3,8 @@ const models = {
     tracksModel: require('./nosql/tracks'),
     storageModel: require('./nosql/storage'),
     categoryModel: require('./nosql/category'),
-    tierItemModel: require('./nosql/tieritem'),
+    templateModel: require('./nosql/template'),
+    tierModel: require('./nosql/tier'),
     itemModel: require('./nosql/items'),
 }
 

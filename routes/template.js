@@ -6,13 +6,13 @@ const {
   createItem,
   updateItem,
   deleteItem,
-} = require('../controllers/tieritem');
+} = require('../controllers/template');
 const checkRol = require('../middleware/rol');
 const authMiddleware = require('../middleware/session');
 const {
   validatorCreateItem,
   validatorGetItem,
-} = require('../validators/tieritem');
+} = require('../validators/template');
 
 router.get('/',authMiddleware, getItems);
 router.get('/:id',authMiddleware, validatorGetItem, getItem);
