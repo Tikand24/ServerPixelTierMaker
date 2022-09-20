@@ -55,6 +55,7 @@ const createItem = async (req, res) => {
       });
     }
     const data = await storageModel.insertMany(fileData);
+    console.log('fileData',fileData)
     res.send({ data });
   } catch (error) {
     console.log('error', error);

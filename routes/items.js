@@ -15,8 +15,8 @@ const {
   validatorGetItem,
 } = require('../validators/items');
 
-router.get('/',authMiddleware, getItems);
-router.get('/:id',authMiddleware, validatorGetItem, getItem);
+router.get('/', getItems);
+router.get('/:id', validatorGetItem, getItem);
 router.get('/tier/:id',authMiddleware, validatorGetItem, getItemByTierId);
 router.post('/',authMiddleware,checkRol(['admin']), validatorCreateItem, createItem);
 router.put('/:id',authMiddleware, validatorGetItem, validatorCreateItem, updateItem);

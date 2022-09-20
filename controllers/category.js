@@ -9,18 +9,13 @@ const { handleHttpError } = require('../utils/handleError');
  */
 const getItems = async (req, res) => {
   try {
-    const tiers = await categoryModel.find({}).lean();
-    const tiersItems = await templateModel.find({tierId:tiers.map(d=>d._id)}).lean();
-    const storageMedia = await storageModel.find({_id:tiersItems.map(d=>d.mediaId)}).lean();
-    tiers.forEach(tier => {
-      const items = tiersItems.filter(tierItem=>tierItem.tierId.toString() == tier._id.toString());
-      items.forEach((i)=>{
-        const storageFind = storageMedia.find(s=>s._id.toString() ==i.mediaId.toString());
-        i.image = storageFind ? storageFind.filename : '';
-      })
-      tier.templates = items;
+    const categories = await categoryModel.find({}).lean();
+    const tiersItems = await templateModel.find({categoryId:categories.map(d=>d._id)}).lean();
+    categories.forEach(category => {
+      const items = tiersItems.filter(tierItem=>tierItem.categoryId.toString() == category._id.toString());
+      category.templates = items;
     });
-    res.send({ data:tiers });
+    res.send({ data:categories });
   } catch (error) {
     handleHttpError(res, 'ERROR_GET_CATEGORY');
   }

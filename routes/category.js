@@ -14,8 +14,8 @@ const {
   validatorGetItem,
 } = require('../validators/category');
 
-router.get('/',authMiddleware, getItems);
-router.get('/:id',authMiddleware, validatorGetItem, getItem);
+router.get('/', getItems);
+router.get('/:id', validatorGetItem, getItem);
 router.post('/',authMiddleware,checkRol(['admin']), validatorCreateItem, createItem);
 router.put('/:id',authMiddleware, validatorGetItem, validatorCreateItem, updateItem);
 router.delete('/:id',authMiddleware, validatorGetItem, deleteItem);

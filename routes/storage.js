@@ -20,7 +20,7 @@ router.get('/',authMiddleware, getItems);
 /**
  * detail of storage
  */
-router.get('/:id',authMiddleware, validatorGetItem, getItem);
+router.get('/:id', validatorGetItem, getItem);
 
 /**
  * create storage
