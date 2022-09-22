@@ -3,7 +3,6 @@ const express = require('express');
 const cors = require('cors');
 const morganBody = require('morgan-body');
 const dbConnect = require('./config/mongo');
-const { initializeSocket } = require('./config/twitch');
 const loggerStream = require('./utils/handleLogger');
 const app = express();
 
@@ -27,4 +26,3 @@ app.listen(port, () => {
   console.log(`Tu app esta lista por http://localhost:${port}`);
 });
 dbConnect();
-initializeSocket(app);

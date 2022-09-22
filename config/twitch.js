@@ -1,5 +1,7 @@
 const tmi = require('tmi.js');
 const http = require('http');
+const express = require('express');
+const app = express();
 const { Server } = require('socket.io');
 
 // Define configuration options
@@ -8,38 +10,38 @@ const opts = {
     username: process.env.USERNAME_TWITCH,
     password: process.env.PASSWORD_TWITCH,
   },
-  channels: [process.env.CHANNELS],
+  channels: [],
 };
-initializeSocket = (app) => {
-  const client = new tmi.client(opts);
 
-  const httpServer = http.createServer(app);
-  const io = new Server(httpServer, {
-    cors: {
-      origin: process.env.ORIGIN_URL_SOCKET,
-      methods: ['GET', 'POST'],
-    },
+const httpServer = http.createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: process.env.ORIGIN_URL_SOCKET,
+    methods: ['GET', 'POST'],
+  },
+});
+io.listen(process.env.PORT_SOCKET);
+io.on('connection', (socket) => {
+  console.log('a user connected', socket.id);
+  socket.join('votes');
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
   });
-  io.listen(process.env.PORT_SOCKET);
-  io.on('connection', (socket) => {
-    console.log('a user connected', socket.id);
-    socket.join('votes');
-    socket.on('disconnect', () => {
-      console.log('user disconnected');
-    });
-  });
-  // Create a client with our options
-
-  // Called every time a message comes in
+});
+let client = new tmi.client(opts);
+initializeSocket = (channels, connect = true) => {
+  if (!connect) {
+    client.disconnect().then(response=>console.log('responseOk',response)).catch(error=>console.log('errorDiscontect',error));
+    return;
+  }
+  opts.channels = [channels];
+  client = new tmi.client(opts);
   onMessageHandler = async (target, context, msg, self) => {
     if (self) {
       return;
-    } // Ignore messages from the bot
+    }
 
-    // Remove whitespace from chat message
     const commandName = msg.trim();
-
-    // If the command is known, let's execute it
     if (commandName === '!dice') {
       const num = rollDice();
       client.say(target, `You rolled a ${num}`);
@@ -56,8 +58,6 @@ initializeSocket = (app) => {
       }
     }
   };
-
-  // Function called when the "dice" command is issued
   rollDice = () => {
     const sides = 6;
     return Math.floor(Math.random() * sides) + 1;
